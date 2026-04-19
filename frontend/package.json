@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@paystack/inline-js": "^2.22.8",
+    "@vercel/analytics": "^2.0.1",
     "axios": "^1.6.0",
     "lucide-react": "^0.378.0",
     "next": "14.2.3",
