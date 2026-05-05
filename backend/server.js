@@ -200,6 +200,10 @@ const db = {
   },
   async deletePrediction(id) {
     if (supabase) {
+      // Nullify prediction_id on any linked payments first (FK constraint bypass).
+      // Payment records (and their amounts) are preserved for revenue tracking.
+      // prediction_title already stores the match name so history context is kept.
+      await supabase.from('payments').update({ prediction_id: null }).eq('prediction_id', id);
       const { data, error } = await supabase.from('predictions').delete().eq('id', id).select().single();
       return error ? null : toP(data);
     }
