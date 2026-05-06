@@ -122,7 +122,7 @@ const ACCENT: Record<string, { bg: string; text: string; glow: string; border: s
 };
 
 // ── Exchange rate: 1 GHS → NGN (update as needed) ────────────────────────────
-const GHS_TO_NGN = 65;
+const GHS_TO_NGN = 125;
 
 // ── localStorage helpers ──────────────────────────────────────────────────────
 const lsKey    = (id: string) => `bt_unlocked_${id}`;

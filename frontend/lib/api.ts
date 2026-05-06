@@ -74,7 +74,7 @@ export async function adminUploadImage(token: string, file: File): Promise<strin
   const formData = new FormData();
   formData.append("image", file);
   const res = await api.post<{ success: boolean; url: string }>("/upload", formData, {
-    headers: { ...adminHeaders(token), "Content-Type": "multipart/form-data" },
+    headers: adminHeaders(token), // Do NOT set Content-Type manually — axios auto-sets it with the multipart boundary
     timeout: 60000,
   });
   return res.data.url;
