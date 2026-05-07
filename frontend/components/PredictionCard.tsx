@@ -105,6 +105,7 @@ interface UnlockedData {
   bookingCode: string;
   tips: string[];
   imageUrl: string;
+  proofImageUrl: string;
   reference: string;
 }
 
@@ -306,10 +307,11 @@ function PaymentModal({
     try {
       const unlock = await getUnlockedPrediction(reference);
       const data: UnlockedData = {
-        content:     unlock.prediction.content     || "",
-        bookingCode: (unlock.prediction as {bookingCode?: string}).bookingCode || "",
-        tips:        (unlock.prediction as {tips?: string[]}).tips        || [],
-        imageUrl:    unlock.prediction.imageUrl    || "",
+        content:      unlock.prediction.content     || "",
+        bookingCode:  (unlock.prediction as {bookingCode?: string}).bookingCode || "",
+        tips:         (unlock.prediction as {tips?: string[]}).tips        || [],
+        imageUrl:     unlock.prediction.imageUrl    || "",
+        proofImageUrl:(unlock.prediction as {proofImageUrl?: string}).proofImageUrl || "",
         reference,
       };
       saveUnlocked(prediction._id, data);
@@ -384,11 +386,12 @@ function PaymentModal({
     try {
       const unlock = await restoreAccess(restoreEmail, prediction._id);
       const data: UnlockedData = {
-        content:     unlock.prediction.content     || "",
-        bookingCode: (unlock.prediction as {bookingCode?: string}).bookingCode || "",
-        tips:        (unlock.prediction as {tips?: string[]}).tips        || [],
-        imageUrl:    unlock.prediction.imageUrl    || "",
-        reference:   unlock.payment.reference,
+        content:      unlock.prediction.content     || "",
+        bookingCode:  (unlock.prediction as {bookingCode?: string}).bookingCode || "",
+        tips:         (unlock.prediction as {tips?: string[]}).tips        || [],
+        imageUrl:     unlock.prediction.imageUrl    || "",
+        proofImageUrl:(unlock.prediction as {proofImageUrl?: string}).proofImageUrl || "",
+        reference:    unlock.payment.reference,
       };
       saveUnlocked(prediction._id, data);
       onSuccess(data);
@@ -771,9 +774,38 @@ function UnlockedCard({ prediction, unlocked }: { prediction: Prediction; unlock
         </span>
       </div>
 
-      {/* Bet-slip image */}
-      {unlocked.imageUrl && (
-        <BetSlipImage src={unlocked.imageUrl} alt={`Bet slip – ${prediction.match}`} />
+      {/* Bet-slip images: Before & After side by side */}
+      {(unlocked.imageUrl || unlocked.proofImageUrl) && (
+        <div className={`grid gap-1 ${
+          unlocked.imageUrl && unlocked.proofImageUrl ? "grid-cols-2" : "grid-cols-1"
+        }`}>
+          {unlocked.imageUrl && (
+            <div className="relative">
+              {unlocked.proofImageUrl && (
+                <span
+                  className="absolute top-2 left-2 z-10 text-[10px] font-bold px-2 py-0.5 rounded-md"
+                  style={{ background: "rgba(0,0,0,0.55)", color: "#fff" }}
+                >
+                  BEFORE
+                </span>
+              )}
+              <BetSlipImage src={unlocked.imageUrl} alt={`Bet slip – ${prediction.match}`} />
+            </div>
+          )}
+          {unlocked.proofImageUrl && (
+            <div className="relative">
+              {unlocked.imageUrl && (
+                <span
+                  className="absolute top-2 left-2 z-10 text-[10px] font-bold px-2 py-0.5 rounded-md"
+                  style={{ background: "rgba(16,185,129,0.8)", color: "#fff" }}
+                >
+                  AFTER ✓
+                </span>
+              )}
+              <BetSlipImage src={unlocked.proofImageUrl} alt={`Proof – ${prediction.match}`} />
+            </div>
+          )}
+        </div>
       )}
 
       {/* Info */}
@@ -970,11 +1002,12 @@ export default function PredictionCard({ prediction, animationDelay = 0 }: Props
     if (cached.reference) {
       getUnlockedPrediction(cached.reference).then(unlock => {
         const fresh: UnlockedData = {
-          content:     unlock.prediction.content     || cached.content     || "",
-          bookingCode: (unlock.prediction as {bookingCode?: string}).bookingCode || cached.bookingCode || "",
-          tips:        (unlock.prediction as {tips?: string[]}).tips        || cached.tips        || [],
-          imageUrl:    unlock.prediction.imageUrl    || "",
-          reference:   cached.reference,
+          content:      unlock.prediction.content     || cached.content     || "",
+          bookingCode:  (unlock.prediction as {bookingCode?: string}).bookingCode || cached.bookingCode || "",
+          tips:         (unlock.prediction as {tips?: string[]}).tips        || cached.tips        || [],
+          imageUrl:     unlock.prediction.imageUrl    || "",
+          proofImageUrl:(unlock.prediction as {proofImageUrl?: string}).proofImageUrl || "",
+          reference:    cached.reference,
         };
         saveUnlocked(prediction._id, fresh);
         setUnlocked(fresh);
