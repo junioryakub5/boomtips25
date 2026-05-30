@@ -597,32 +597,6 @@ function NigeriaPaymentModal({
   onClose: () => void;
 }) {
   const acc = ACCENT[prediction.oddsCategory] || ACCENT["2+"];
-  const ngn = Math.round(prediction.price * GHS_TO_NGN);
-  const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    const scrollY = window.scrollY;
-    const body = document.body;
-    body.style.position = "fixed";
-    body.style.top = `-${scrollY}px`;
-    body.style.left = "0";
-    body.style.right = "0";
-    body.style.overflow = "hidden";
-    return () => {
-      body.style.position = "";
-      body.style.top = "";
-      body.style.left = "";
-      body.style.right = "";
-      body.style.overflow = "";
-      window.scrollTo(0, scrollY);
-    };
-  }, []);
-
-  const copyAccount = () => {
-    navigator.clipboard.writeText("6118783926");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   return (
     <div
@@ -658,66 +632,18 @@ function NigeriaPaymentModal({
           </div>
         </div>
 
-        {/* Amount */}
+        {/* Temporarily unavailable notice */}
         <div
-          className="mx-6 mt-5 rounded-2xl px-5 py-4 flex items-center justify-between"
-          style={{ background: acc.bg, border: `1px solid ${acc.border}` }}
+          className="mx-6 mt-5 rounded-2xl px-5 py-6 flex flex-col items-center gap-3 text-center"
+          style={{ background: "rgba(239,68,68,0.05)", border: "1px solid rgba(239,68,68,0.15)" }}
         >
+          <span className="text-3xl">🚫</span>
           <div>
-            <p className="text-xs mb-0.5" style={{ color: "#9ca3af" }}>Amount to Pay</p>
-            <p className="text-2xl font-bold" style={{ color: acc.text }}>₦{ngn.toLocaleString()}</p>
-            <p className="text-xs mt-0.5" style={{ color: "#9ca3af" }}>≈ GHS {prediction.price}</p>
+            <p className="font-semibold text-sm mb-1" style={{ color: "#111827" }}>Payment Unavailable</p>
+            <p className="text-xs leading-relaxed" style={{ color: "#6b7280" }}>
+              Nigerian bank transfer is temporarily unavailable. Please contact us on Telegram and we&apos;ll sort out your payment manually.
+            </p>
           </div>
-          <span className="text-3xl">🇳🇬</span>
-        </div>
-
-        {/* Bank details */}
-        <div className="px-6 mt-4 space-y-2.5">
-          <div
-            className="flex items-center justify-between px-4 py-3 rounded-xl"
-            style={{ background: "#f9fafb", border: "1px solid rgba(0,0,0,0.06)" }}
-          >
-            <span className="text-xs" style={{ color: "#9ca3af" }}>Bank</span>
-            <span className="text-sm font-semibold" style={{ color: "#111827" }}>OPAY / PAYCOM</span>
-          </div>
-          <div
-            className="flex items-center justify-between px-4 py-3 rounded-xl"
-            style={{ background: "#f9fafb", border: "1px solid rgba(0,0,0,0.06)" }}
-          >
-            <span className="text-xs" style={{ color: "#9ca3af" }}>Account Name</span>
-            <span className="text-sm font-semibold text-right" style={{ color: "#111827", maxWidth: "60%" }}>Agbalalah Oyakemeagbeigha</span>
-          </div>
-          <div
-            className="flex items-center justify-between px-4 py-3 rounded-xl"
-            style={{ background: "#f9fafb", border: "1px solid rgba(0,0,0,0.06)" }}
-          >
-            <span className="text-xs" style={{ color: "#9ca3af" }}>Account Number</span>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-bold tracking-wider" style={{ color: "#111827", fontFamily: "monospace" }}>6118783926</span>
-              <button
-                onClick={copyAccount}
-                className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg font-medium transition-all"
-                style={{
-                  background: copied ? "rgba(16,185,129,0.1)" : acc.bg,
-                  color: copied ? "#10b981" : acc.text,
-                  border: `1px solid ${copied ? "rgba(16,185,129,0.2)" : acc.border}`,
-                }}
-              >
-                {copied ? <><Check size={10} />Copied!</> : <><Copy size={10} />Copy</>}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Note */}
-        <div
-          className="mx-6 mt-4 px-4 py-3 rounded-xl flex gap-2.5"
-          style={{ background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.15)" }}
-        >
-          <span className="text-base flex-shrink-0">ℹ️</span>
-          <p className="text-xs leading-relaxed" style={{ color: "#6b7280" }}>
-            After payment, send proof of transfer to our Telegram support for instant activation.
-          </p>
         </div>
 
         {/* Actions */}
