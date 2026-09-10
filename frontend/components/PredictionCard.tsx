@@ -588,6 +588,40 @@ function PaymentModal({
   );
 }
 
+
+// ── Copyable account number field ─────────────────────────────────────────────
+function AccountNumberField() {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    navigator.clipboard.writeText("6078378984").then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+  return (
+    <div
+      className="rounded-2xl px-5 py-4 flex items-center justify-between cursor-pointer"
+      style={{ background: "#f9fafb", border: "1px solid rgba(0,0,0,0.06)" }}
+      onClick={copy}
+    >
+      <div>
+        <p className="text-xs mb-0.5" style={{ color: "#9ca3af" }}>Account Number</p>
+        <p className="font-bold text-base tracking-widest" style={{ color: "#111827", letterSpacing: "0.12em" }}>
+          6078378984
+        </p>
+      </div>
+      <button
+        className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl transition-all"
+        style={copied
+          ? { background: "rgba(16,185,129,0.1)", color: "#10b981" }
+          : { background: "rgba(255,60,0,0.08)", color: "#ff3c00" }}
+      >
+        {copied ? <><Check size={13} /> Copied!</> : <><Copy size={13} /> Copy</>}
+      </button>
+    </div>
+  );
+}
+
 // ── Nigeria Bank Transfer Modal ───────────────────────────────────────────────
 function NigeriaPaymentModal({
   prediction,
@@ -625,25 +659,42 @@ function NigeriaPaymentModal({
               </div>
               <div>
                 <h2 className="font-semibold text-sm" style={{ color: "#111827" }}>Bank Transfer Details</h2>
-                <p className="text-xs" style={{ color: "#9ca3af" }}>Nigeria — OPay Transfer</p>
+                <p className="text-xs" style={{ color: "#9ca3af" }}>Nigeria — Bank Transfer</p>
               </div>
             </div>
             <button onClick={onClose} style={{ color: "#9ca3af" }}><X size={18} /></button>
           </div>
         </div>
 
-        {/* Temporarily unavailable notice */}
-        <div
-          className="mx-6 mt-5 rounded-2xl px-5 py-6 flex flex-col items-center gap-3 text-center"
-          style={{ background: "rgba(239,68,68,0.05)", border: "1px solid rgba(239,68,68,0.15)" }}
-        >
-          <span className="text-3xl">🚫</span>
-          <div>
-            <p className="font-semibold text-sm mb-1" style={{ color: "#111827" }}>Payment Unavailable</p>
-            <p className="text-xs leading-relaxed" style={{ color: "#6b7280" }}>
-              Nigerian bank transfer is temporarily unavailable. Please contact us on Telegram and we&apos;ll sort out your payment manually.
-            </p>
+        {/* Bank transfer details */}
+        <div className="mx-6 mt-5 space-y-3">
+          {/* Bank Name */}
+          <div
+            className="rounded-2xl px-5 py-4 flex items-center justify-between"
+            style={{ background: "#f9fafb", border: "1px solid rgba(0,0,0,0.06)" }}
+          >
+            <div>
+              <p className="text-xs mb-0.5" style={{ color: "#9ca3af" }}>Bank Name</p>
+              <p className="font-semibold text-sm" style={{ color: "#111827" }}>9 Payment Service Bank</p>
+            </div>
+            <span className="text-xl">🏦</span>
           </div>
+
+          {/* Account Name */}
+          <div
+            className="rounded-2xl px-5 py-4 flex items-center justify-between"
+            style={{ background: "#f9fafb", border: "1px solid rgba(0,0,0,0.06)" }}
+          >
+            <div>
+              <p className="text-xs mb-0.5" style={{ color: "#9ca3af" }}>Account Name</p>
+              <p className="font-semibold text-sm" style={{ color: "#111827" }}>ADEDOKUN DAMILARE TIMILEYIN</p>
+            </div>
+            <span className="text-xl">👤</span>
+          </div>
+
+          {/* Account Number */}
+          {/* Account Number (copyable) */}
+          <AccountNumberField />
         </div>
 
         {/* Actions */}

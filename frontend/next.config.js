@@ -15,6 +15,10 @@ const nextConfig = {
         source: "/portal",
         destination: "/admin",
       },
+      {
+        source: '/api/:path*',
+        destination: 'http://187.124.35.84:5002/api/:path*',
+      },
     ];
   },
   async redirects() {
